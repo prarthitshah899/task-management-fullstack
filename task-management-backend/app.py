@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api, Resource
 from dotenv import load_dotenv
 from pymongo import MongoClient
@@ -9,6 +10,7 @@ from flask import request
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 task_api = Api(app)
 
 # loaded environment file
@@ -29,7 +31,7 @@ class TasksListCreate(Resource):
         if not tasks:
             return {"message": "Tasks data is not found"}, 404
 
-        return {"data": list(tasks)}, 200
+        return {"message": "Tasks fetched successfully", "data": list(tasks)}, 200
 
     ############################## Create Task #############################
     def post(self):
