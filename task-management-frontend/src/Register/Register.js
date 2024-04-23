@@ -1,4 +1,4 @@
-import "./Login.css";
+import "./Register.css";
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, notification } from "antd";
@@ -7,14 +7,15 @@ const Context = React.createContext({
   name: "Default",
 });
 
-const Login = (props) => {
+const Register = () => {
   const [api, contextHolder] = notification.useNotification();
 
-  const { setLoggedIn } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [loginApiError, setLoginApiError] = useState("");
 
   const navigate = useNavigate();
@@ -32,9 +33,10 @@ const Login = (props) => {
     []
   );
 
-  const onLoginClicked = () => {
+  const onSignupClicked = () => {
     setEmailError("");
     setPasswordError("");
+    setConfirmPasswordError("");
 
     // Check if the user has entered both fields correctly
     if ("" === email) {
@@ -45,16 +47,18 @@ const Login = (props) => {
       return setEmailError("Please enter a valid email");
     }
 
-    if ("" === password) {
+    if ("" === password || "" === confirmPassword) {
       return setPasswordError("Please enter a password");
     }
+    if (password !== confirmPassword) {
+      return setConfirmPasswordError("Please Enter Similar password");
+    }
 
-    if (password.length < 7) {
+    if (password.length < 7 || confirmPassword.length < 7) {
       return setPasswordError("The password must be 8 characters or longer");
     }
-    setLoggedIn(true);
 
-    fetch("http://127.0.0.1:5000/login", {
+    fetch("http://127.0.0.1:5000/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +71,7 @@ const Login = (props) => {
           setLoginApiError(data?.message);
         } else {
           openNotification("topRight", data?.message);
-          navigate("/tasks");
+          navigate("/");
         }
       })
       .catch((error) => {
@@ -81,8 +85,9 @@ const Login = (props) => {
         {contextHolder}
         <div className={"mainContainer"}>
           <div className={"titleContainer"}>
-            <div>Login</div>
+            <div>Register</div>
           </div>
+          <br />
           <br />
           <div className={"inputContainer"}>
             <Input
@@ -105,20 +110,32 @@ const Login = (props) => {
           </div>
           <br />
           <div className={"inputContainer"}>
-            <Button type="primary" onClick={onLoginClicked} size="large">
-              Log in
+            <Input.Password
+              value={confirmPassword}
+              placeholder="Re-Enter your password here"
+              onChange={(ev) => setConfirmPassword(ev.target.value)}
+              className={"inputBox"}
+            />
+            <label className="errorLabel">{confirmPasswordError}</label>
+          </div>
+          <br></br>
+          <div className={"inputContainer"}>
+            <Button type="primary" onClick={onSignupClicked} size="large">
+              Sign up
             </Button>
           </div>
           <br></br>
           <label className="errorLabel">{loginApiError}</label>
           <br></br>
-          <Button onClick={() => navigate("/register")} type="primary" ghost>
-            Create a new User ?
-          </Button>
+          <div className={"inputContainer"}>
+            <Button type="primary" onClick={() => navigate("/")} ghost>
+              Already Logged in ?
+            </Button>
+          </div>
         </div>
       </Context.Provider>
     </>
   );
 };
 
-export default Login;
+export default Register;

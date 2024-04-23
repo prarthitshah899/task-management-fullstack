@@ -1,13 +1,23 @@
 import "./Tasks.css";
 import { useNavigate } from "react-router-dom";
 import React, { Suspense, useState, useEffect, useMemo } from "react";
-import { Button, Table, Space, Tooltip, Modal, Spin, notification } from "antd";
+import {
+  Button,
+  Table,
+  Space,
+  Tooltip,
+  Modal,
+  Spin,
+  notification,
+  Avatar,
+} from "antd";
 import {
   DeleteFilled,
   EditFilled,
   ExclamationCircleOutlined,
   EyeFilled,
   LogoutOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import TaskForm from "./TaskForm.js";
 
@@ -17,12 +27,13 @@ const Context = React.createContext({
 
 const Tasks = (props) => {
   const { setLoggedIn } = props;
+  const [idForEdit, setIdForEdit] = useState();
+  const [idForView, setIdForView] = useState();
   const [api, contextHolder] = notification.useNotification();
   const [createTask, setCreateTask] = useState(false);
   const [editTask, setEditTask] = useState(false);
   const [readTask, setReadTask] = useState(false);
   const [tasks, setTasks] = useState([]);
-  const [singleTaskData, setSingleTaskData] = useState();
 
   const navigate = useNavigate();
 
@@ -60,18 +71,30 @@ const Tasks = (props) => {
       dataIndex: "title",
       key: "title",
       width: 100,
+      sorter: {
+        compare: (a, b) => a.title - b.title,
+        multiple: 3,
+      },
     },
     {
       title: "Description",
       dataIndex: "description",
       key: "description",
       width: 400,
+      sorter: {
+        compare: (a, b) => a.description - b.description,
+        multiple: 2,
+      },
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 200,
+      sorter: {
+        compare: (a, b) => a.status - b.status,
+        multiple: 1,
+      },
     },
     {
       title: "Action",
@@ -90,7 +113,6 @@ const Tasks = (props) => {
       okText: "YES",
       cancelText: "CANCEL",
       onOk() {
-        console.log(id);
         fetch("http://127.0.0.1:5000/tasks/" + id, {
           method: "DELETE",
           headers: {
@@ -107,28 +129,14 @@ const Tasks = (props) => {
     });
   };
 
-  const getSingleTaskData = (id) => {
-    fetch("http://127.0.0.1:5000/tasks/" + id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then(
-        (singleTaskData) =>
-          singleTaskData?.data && setSingleTaskData(singleTaskData?.data)
-      );
-  };
-
   const onUpdateClick = (id) => {
     setEditTask(true);
-    getSingleTaskData(id);
+    setIdForEdit(id);
   };
 
   const onReadClick = (id) => {
     setReadTask(true);
-    getSingleTaskData(id);
+    setIdForView(id);
   };
 
   const onCreateClick = () => {
@@ -213,7 +221,7 @@ const Tasks = (props) => {
           <Suspense fallback={<Spin />}>
             <TaskForm
               type="edit"
-              singleTaskData={singleTaskData}
+              idForEdit={idForEdit}
               setEditTask={setEditTask}
               setTasks={setTasks}
             />
@@ -232,7 +240,7 @@ const Tasks = (props) => {
           }}
         >
           <Suspense fallback={<Spin />}>
-            <TaskForm type="read" singleTaskData={singleTaskData} />
+            <TaskForm type="read" idForView={idForView} />
           </Suspense>
         </Modal>
 
@@ -240,12 +248,19 @@ const Tasks = (props) => {
           <div className={"titleContainer"}>
             <div>
               Task Management
-              <Button
-                onClick={onLogoutButtonClicked}
-                style={{ left: "235px" }}
-                icon={<LogoutOutlined />}
-                type="primary"
-              ></Button>
+              <Avatar
+                style={{ left: "180px" }}
+                size="large"
+                icon={<UserOutlined />}
+              />
+              <Tooltip title="Logout">
+                <Button
+                  style={{ left: "210px", bottom: "5px" }}
+                  onClick={onLogoutButtonClicked}
+                  icon={<LogoutOutlined />}
+                  type="primary"
+                ></Button>
+              </Tooltip>
             </div>
             <br></br>
           </div>

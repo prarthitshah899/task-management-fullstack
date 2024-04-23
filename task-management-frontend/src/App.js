@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./Login/Login.js";
 import Tasks from "./Tasks/Tasks.js";
+import Register from "./Register/Register.js";
 import { useState } from "react";
 
 const App = () => {
@@ -11,15 +12,17 @@ const App = () => {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route
-            path="/tasks"
-            element={
-              loggedIn && (
-                <Tasks loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-              )
-            }
+            exact
+            path="/"
+            element={<Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
           />
+          <Route
+            exact
+            path="/tasks"
+            element={<Tasks setLoggedIn={setLoggedIn} />}
+          />
+          <Route exact path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </div>

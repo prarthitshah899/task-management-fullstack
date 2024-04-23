@@ -3,7 +3,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
   }
   
   .titleContainer {
@@ -48,9 +47,9 @@
     justify-content: center;
   }
   
-  .inputContainer > .errorLabel {
+  .errorLabel {
     color: red;
-    font-size: 12px;
+    font-size: 20px;
   }
   
   .inputBox {
