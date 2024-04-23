@@ -60,8 +60,9 @@ class TasksListCreate(Resource):
         if not result.inserted_id:
             return {"message": "Failed to insert"}, 500
 
-        task = database.Tasks.find({"_id": result.inserted_id})
-        return {"message": "Task Inserted Successfully", "data": list(task)[0]}, 200
+        # task = database.Tasks.find({"_id": result.inserted_id})
+        tasks = database.Tasks.find({})
+        return {"message": "Task Inserted Successfully", "data": list(tasks)}, 200
 
 
 class TasksRetrieveUpdateDelete(Resource):
@@ -96,24 +97,31 @@ class TasksRetrieveUpdateDelete(Resource):
             result = database.Tasks.update_one(query, content)
 
             if not result.matched_count:
-                return {"message": "Failed to update. Record is not found"}, 404
+                return {"message": "Failed to update. Record is not found"}, 409
 
             if not result.modified_count:
                 return {"message": "No changes applied"}, 500
         else:
-            return {"message": "No changes applied"}, 500
+            return {
+                "message": "No changes applied! Current and Requested both the objects are the same"
+            }, 405
 
-        return {"message": "Task Updated successfully"}, 200
+        tasks = database.Tasks.find({})
+        return {"message": "Task Updated successfully", "data": list(tasks)}, 200
 
     ############################## Delete Single Task #############################
     def delete(self, _id):
         query = {"_id": _id}
         result = database.Tasks.delete_one(query)
+        tasks = database.Tasks.find({})
 
         if not result.deleted_count:
-            return {"message": "Failed to delete a task"}, 500
+            return {"message": "Task data is not found!"}, 500
 
-        return {"message": "Task Deleted successfully"}, 200
+        if not tasks:
+            return {"message": "Tasks data is not found"}, 404
+
+        return {"message": "Task Deleted successfully", "data": list(tasks)}, 200
 
 
 class Register(Resource):

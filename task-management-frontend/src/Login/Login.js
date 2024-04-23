@@ -1,6 +1,7 @@
 import "./Login.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Input, Button } from "antd";
 
 const Login = (props) => {
   const { setLoggedIn } = props;
@@ -8,12 +9,14 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [loginApiError, setLoginApiError] = useState("");
 
   const navigate = useNavigate();
 
   const onLoginClicked = () => {
     setEmailError("");
     setPasswordError("");
+    setLoginApiError("");
 
     // Check if the user has entered both fields correctly
     if ("" === email) {
@@ -31,8 +34,6 @@ const Login = (props) => {
     if (password.length < 7) {
       return setPasswordError("The password must be 8 characters or longer");
     }
-    console.log(email);
-    console.log(password);
     setLoggedIn(true);
 
     fetch("http://127.0.0.1:5000/login", {
@@ -48,7 +49,7 @@ const Login = (props) => {
         navigate("/tasks");
       })
       .catch((error) => {
-        console.log(error);
+        setLoginApiError(error);
       });
   };
 
@@ -59,7 +60,7 @@ const Login = (props) => {
       </div>
       <br />
       <div className={"inputContainer"}>
-        <input
+        <Input
           value={email}
           placeholder="Enter your email here"
           onChange={(ev) => setEmail(ev.target.value)}
@@ -69,7 +70,7 @@ const Login = (props) => {
       </div>
       <br />
       <div className={"inputContainer"}>
-        <input
+        <Input.Password
           value={password}
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
@@ -79,12 +80,10 @@ const Login = (props) => {
       </div>
       <br />
       <div className={"inputContainer"}>
-        <input
-          className={"inputButton"}
-          type="button"
-          onClick={onLoginClicked}
-          value={"Log in"}
-        />
+        <Button type="primary" onClick={onLoginClicked} size="large">
+          Log in
+        </Button>
+        <label className="errorLabel">{loginApiError}</label>
       </div>
     </div>
   );

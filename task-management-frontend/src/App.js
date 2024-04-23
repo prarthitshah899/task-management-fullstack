@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -13,7 +14,11 @@ const App = () => {
           <Route path="/" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route
             path="/tasks"
-            element={<Tasks loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+            element={
+              loggedIn && (
+                <Tasks loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+              )
+            }
           />
         </Routes>
       </BrowserRouter>
