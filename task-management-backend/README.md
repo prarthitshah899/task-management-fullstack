@@ -1,7 +1,6 @@
 # Backend for task-management application
 
-The Backend is written in Python-flask
-please follow the below steps
+The Backend is written in Python-flask :sunglasses:, please follow the below steps
 
 ## [1] Create a Virtual Environment for the Project Below is the command for the same
 
@@ -22,11 +21,12 @@ python -m pip install -r requirement.txt
 export MONGODB_URI='mongodb+srv://pesto_tech:Wkria8SOvcGsgoTW@todo-clustor.skwuw4o.mongodb.net/'
 ```
 
-It is easy right ?
+It is easy right ? :smiley:
 Now the only last steps which is pending is just to turn up the backend Flask server by running below command
 
 ```shell
 flask run
 ```
 
-I am attaching the postman collection as well here in the project only so you can also refer to that [Postman](./Task-management-collection.postman_collection.json)
+I am attaching the postman collection as well here in the project only so you can also refer to that :innocent:
+[Postman](../Task-management-collection.postman_collection.json)

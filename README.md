@@ -11,7 +11,7 @@ This CRUD App can manipulate a database which resides in MongoDB
 
 One of the fancy part of web app is that it is separated by layers.
 
-- The 1st layer is [frontend](./task-management-frontend), which utilizes the [APIs](./task-management-backend) provided by backend. When implementing [frontend](./task-management-frontend), we can assume that all the [APIs](./task-management-backend) has already been implemented.
+- The 1st layer is [Frontend](./task-management-frontend), which utilizes the [APIs](./task-management-backend) provided by backend. When implementing [Frontend](./task-management-frontend), we can assume that all the [APIs](./task-management-backend) has already been implemented.
 
 - The 2nd layer is [Backend layer](./task-management-backend), which includes the implementation of manipulating database. I have provided a few implementations, they all have the same function interface.
 
