@@ -27,6 +27,7 @@ const Context = React.createContext({
 
 const Tasks = (props) => {
   const { setLoggedIn } = props;
+
   const [idForEdit, setIdForEdit] = useState();
   const [idForView, setIdForView] = useState();
   const [api, contextHolder] = notification.useNotification();

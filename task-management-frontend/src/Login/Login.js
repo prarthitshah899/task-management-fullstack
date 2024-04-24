@@ -25,6 +25,7 @@ const Login = (props) => {
       placement,
     });
   };
+
   const contextValue = useMemo(
     () => ({
       name: "Ant Design",
@@ -62,11 +63,11 @@ const Login = (props) => {
       body: JSON.stringify({ email: email, password: password }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data?.statusCode !== 200) {
-          setLoginApiError(data?.message);
+      .then((loginApiData) => {
+        if (loginApiData?.statusCode !== 200) {
+          setLoginApiError(loginApiData?.message);
         } else {
-          openNotification("topRight", data?.message);
+          openNotification("topRight", loginApiData?.message);
           navigate("/tasks");
         }
       })

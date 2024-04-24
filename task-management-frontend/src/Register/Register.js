@@ -16,7 +16,7 @@ const Register = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [loginApiError, setLoginApiError] = useState("");
+  const [signupApiError, setSignupApiError] = useState("");
 
   const navigate = useNavigate();
 
@@ -68,14 +68,14 @@ const Register = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data?.statusCode !== 200) {
-          setLoginApiError(data?.message);
+          setSignupApiError(data?.message);
         } else {
           openNotification("topRight", data?.message);
           navigate("/");
         }
       })
       .catch((error) => {
-        setLoginApiError(error);
+        setSignupApiError(error);
       });
   };
 
@@ -125,7 +125,7 @@ const Register = () => {
             </Button>
           </div>
           <br></br>
-          <label className="errorLabel">{loginApiError}</label>
+          <label className="errorLabel">{signupApiError}</label>
           <br></br>
           <div className={"inputContainer"}>
             <Button type="primary" onClick={() => navigate("/")} ghost>
